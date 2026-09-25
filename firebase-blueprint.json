@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile representation",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "companyName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Payroll": {
+      "title": "Payroll",
+      "description": "Company payroll run record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "period": { "type": "string" },
+        "payday": { "type": "string" },
+        "submitBy": { "type": "string" },
+        "totalAmount": { "type": "number" },
+        "employeesCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "pending", "processed", "completed"] },
+        "directDepositDate": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "totalAmount", "status", "createdAt"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Team member or contractor",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string" },
+        "department": { "type": "string" },
+        "type": { "type": "string", "enum": ["full-time", "part-time", "contractor"] },
+        "compensation": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "onboarding", "leave", "inactive"] },
+        "source": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "email", "role", "createdAt"]
+    },
+    "Benefit": {
+      "title": "Benefit",
+      "description": "Company benefit or perks package",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "provider": { "type": "string" },
+        "enrolledCount": { "type": "number" },
+        "monthlyContribution": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "category", "createdAt"]
+    },
+    "AiTask": {
+      "title": "AiTask",
+      "description": "Generated AI artifacts and history",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string" },
+        "prompt": { "type": "string" },
+        "modelUsed": { "type": "string" },
+        "result": { "type": "string" },
+        "mediaUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Primary user profile document"
+    },
+    "/users/{userId}/payrolls/{payrollId}": {
+      "schema": { "$ref": "#/entities/Payroll" },
+      "description": "Payrolls created by the user"
+    },
+    "/users/{userId}/employees/{employeeId}": {
+      "schema": { "$ref": "#/entities/Employee" },
+      "description": "Employees managed by the user"
+    },
+    "/users/{userId}/benefits/{benefitId}": {
+      "schema": { "$ref": "#/entities/Benefit" },
+      "description": "Benefits packages for the user's company"
+    },
+    "/users/{userId}/ai_tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/AiTask" },
+      "description": "AI operations initiated by the user"
+    }
+  }
+}
